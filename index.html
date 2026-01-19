@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>myPhamilee Pro | Connect Your Roots</title>
+    
+    <!-- Favicon: Logo 1 (Symbol) -->
+    <link rel="icon" href="https://z-cdn-media.chatglm.cn/files/691ad60c-0efc-41ae-9403-1c498e80b75d.PNG?auth_key=1868675181-3a53deabc278460884f62e7805c87be2-0-c3745dee68f6ea522399293fc812d318" type="image/png">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* =========================================
+           CSS VARIABLES & THEME ENGINE
+           ========================================= */
+        :root {
+            /* Light Theme (Default) */
+            --primary-color: #2c5f2d; /* Deep Forest Green */
+            --primary-light: #97bc62; /* Fresh Green */
+            --primary-dark: #1e421f;
+            --secondary-color: #ffc857; /* Warm Gold */
+            --accent-color: #e63946; /* Alert Red */
+            --bg-color: #f4f1ea; /* Cream */
+            --sidebar-bg: #1e1e1e;
+            --card-bg: #ffffff;
+            --text-main: #2c3e50;
+            --text-muted: #6c757d;
+            --border-color: #e9ecef;
+            --input-bg: #ffffff;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.15);
+        }
+
+        [data-theme="dark"] {
+            /* Dark Theme Overrides */
+            --primary-color: #4caf50;
+            --primary-light: #81c784;
+            --primary-dark: #388e3c;
+            --secondary-color: #ffd740;
+            --bg-color: #121212;
+            --sidebar-bg: #000000;
+            --card-bg: #1e1e1e;
+            --text-main: #e0e0e0;
+            --text-muted: #b0b0b0;
+            --border-color: #333333;
+            --input-bg: #2c2c2c;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* =========================================
+           LAYOUT: SIDEBAR (Desktop Only)
+           ========================================= */
+        aside {
+            width: 260px;
+            background: var(--sidebar-bg);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-shadow: var(--shadow-md);
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .brand {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Center logo in sidebar */
+            position: relative;
+            height: 60px; /* Fixed height for alignment */
+        }
+
+        /* Logo Styling for Sidebar (Logo 1: Symbol) */
+        .sidebar-logo {
+            height: 50px;
+            width: auto;
+            object-fit: contain;
+            transition: filter 0.3s ease;
+        }
+
+        /* Invert logo in Dark Mode because the logo has a Black Background */
+        [data-theme="dark"] .sidebar-logo {
+            filter: invert(1); 
+        }
+
+        .theme-toggle {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            padding: 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            position: absolute;
+            right: 0;
+            top: 10px;
+            width: 30px; height: 30px;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s;
+        }
+        
+        .theme-toggle:hover { background: rgba(255,255,255,0.2); }
+
+        .sidebar-nav-list { list-style: none; flex: 1; margin-top: 20px; }
+        .sidebar-nav-list li { margin-bottom: 8px; }
+
+        .sidebar-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            width: 100%;
+            text-align: left;
+            padding: 12px 15px;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-btn:hover, .sidebar-btn.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--primary-light);
+            font-weight: 700;
+            padding-left: 20px;
+        }
+
+        .user-profile {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary-light);
+        }
+
+        .user-info small { display: block; opacity: 0.6; font-size: 0.75rem; }
+        .user-info strong { display: block; font-size: 0.9rem; }
+
+        /* =========================================
+           LAYOUT: MAIN CONTENT & HEADER
+           ========================================= */
+        main {
+            flex: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        header {
+            background: var(--card-bg);
+            padding: 10px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.3s;
+            position: relative;
+            z-index: 50;
+        }
+
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        
+        /* Logo Styling for Header (Logo 2: Full) */
+        .brand-logo {
+            height: 45px;
+            width: auto;
+            display: block;
+            object-fit: contain;
+            /* Invert in Dark Mode */
+            transition: filter 0.3s ease;
+        }
+
+        [data-theme="dark"] .brand-logo {
+            filter: invert(1);
+        }
+
+        h2 {
+            font-family: 'DM Serif Display', serif;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+
+        .header-actions { display: flex; gap: 10px; }
+
+        /* Responsive helper for Page Title */
+        .desktop-only-title { display: none; }
+        @media(min-width:769px) { .desktop-only-title { display: block; } }
+
+        /* =========================================
+           MOBILE NAV DROPDOWN
+           ========================================= */
+        .mobile-toggle-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-main);
+            cursor: pointer;
+        }
+
+        .mobile-menu-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: var(--card-bg);
+            box-shadow: var(--shadow-lg);
+            padding: 0;
+            z-index: 49;
+            border-bottom: 1px solid var(--border-color);
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .mobile-menu-dropdown.open {
+            max-height: 400px;
+            transition: max-height 0.4s ease-in;
+        }
+
+        .mobile-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 30px;
+            color: var(--text-main);
+            text-decoration: none;
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.2s;
+        }
+
+        .mobile-link:hover { background: var(--bg-color); }
+        .mobile-link.active { background: rgba(44, 95, 45, 0.1); color: var(--primary-color); font-weight: 700; border-left: 4px solid var(--primary-color); }
+
+        /* =========================================
+           COMPONENTS & VIEWS
+           ========================================= */
+        #content-area {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .view-section { display: none; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Buttons */
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            border: none;
+            display: inline-flex; align-items: center; gap: 8px;
+            transition: transform 0.1s;
+        }
+        .btn:active { transform: scale(0.98); }
+        .btn-primary { background: var(--primary-color); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-main); }
+        .btn-outline:hover { background: var(--bg-color); }
+
+        /* Dashboard */
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: var(--card-bg); padding: 20px; border-radius: 12px; box-shadow: var(--shadow-sm); border-left: 4px solid var(--primary-color); transition: background 0.3s; }
+        .stat-card h3 { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .stat-card .value { font-size: 2.5rem; font-family: 'DM Serif Display', serif; color: var(--text-main); margin-top: 5px; }
+
+        /* Tree */
+        .tree-container { overflow: auto; text-align: center; background: var(--card-bg); padding: 40px; border-radius: 12px; box-shadow: var(--shadow-sm); min-height: 400px; display: flex; justify-content: center; }
+        .tree ul { padding-top: 20px; position: relative; transition: all 0.5s; display: flex; justify-content: center; }
+        .tree li { float: left; text-align: center; list-style-type: none; position: relative; padding: 20px 5px 0 5px; }
+        .tree li::before, .tree li::after { content: ''; position: absolute; top: 0; right: 50%; border-top: 2px solid var(--border-color); width: 50%; height: 20px; }
+        .tree li::after { right: auto; left: 50%; border-left: 2px solid var(--border-color); }
+        .tree li:only-child::after, .tree li:only-child::before { display: none; }
+        .tree li:only-child { padding-top: 0; }
+        .tree li:first-child::before, .tree li:last-child::after { border: 0 none; }
+        .tree li:last-child::before { border-right: 2px solid var(--border-color); border-radius: 0 5px 0 0; }
+        .tree li:first-child::after { border-radius: 5px 0 0 0; }
+        .tree ul ul::before { content: ''; position: absolute; top: 0; left: 50%; border-left: 2px solid var(--border-color); width: 0; height: 20px; }
+        .member-node { background: var(--card-bg); border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; display: inline-block; width: 140px; transition: all 0.3s; cursor: pointer; box-shadow: var(--shadow-sm); position: relative; color: var(--text-main); }
+        .member-node:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); border-color: var(--primary-color); }
+        .member-node img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; margin-bottom: 5px; border: 2px solid var(--primary-light); }
+        .member-node h4 { font-size: 0.9rem; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .member-node span { font-size: 0.75rem; color: var(--text-muted); display: block; }
+        .member-node.admin-badge::after { content: '\f0e3'; font-family: "Font Awesome 6 Free"; font-weight: 900; position: absolute; top: -5px; right: -5px; color: var(--secondary-color); font-size: 12px; }
+
+        /* Tables */
+        .table-container { background: var(--card-bg); border-radius: 12px; box-shadow: var(--shadow-sm); overflow: hidden; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 15px 20px; text-align: left; border-bottom: 1px solid var(--border-color); color: var(--text-main); }
+        th { background: rgba(0,0,0,0.02); font-weight: 700; color: var(--primary-color); }
+        .status-badge { padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; }
+        .status-pending { background: rgba(255, 193, 7, 0.2); color: #b78900; }
+        .status-approved { background: rgba(40, 167, 69, 0.2); color: #155724; }
+
+        /* Gallery */
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .gallery-item { background: var(--card-bg); border-radius: 8px; overflow: hidden; box-shadow: var(--shadow-sm); position: relative; aspect-ratio: 1; cursor: pointer; }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .gallery-item:hover img { transform: scale(1.05); }
+        .gallery-caption { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: white; padding: 10px; font-size: 0.8rem; transform: translateY(100%); transition: transform 0.3s; }
+        .gallery-item:hover .gallery-caption { transform: translateY(0); }
+
+        /* Chat */
+        .chat-layout { display: flex; height: 600px; background: var(--card-bg); border-radius: 12px; box-shadow: var(--shadow-sm); overflow: hidden; }
+        .chat-sidebar { width: 280px; border-right: 1px solid var(--border-color); display: flex; flex-direction: column; background: var(--bg-color); }
+        .chat-list { flex: 1; overflow-y: auto; }
+        .chat-item { padding: 15px; cursor: pointer; display: flex; align-items: center; gap: 10px; color: var(--text-main); transition: background 0.2s; }
+        .chat-item:hover, .chat-item.active { background: rgba(0,0,0,0.05); }
+        .chat-main { flex: 1; display: flex; flex-direction: column; }
+        .messages-area { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        .message { max-width: 70%; padding: 10px 15px; border-radius: 15px; font-size: 0.95rem; position: relative; }
+        .msg-sent { align-self: flex-end; background: var(--primary-color); color: white; border-bottom-right-radius: 2px; }
+        .msg-received { align-self: flex-start; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-main); border-bottom-left-radius: 2px; }
+        .chat-input { padding: 15px; border-top: 1px solid var(--border-color); display: flex; gap: 10px; background: var(--card-bg); }
+        .chat-input input { flex: 1; padding: 12px; border: 1px solid var(--border-color); border-radius: 20px; background: var(--input-bg); color: var(--text-main); outline: none; }
+        
+        /* Events */
+        .events-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .event-card { background: var(--card-bg); border-radius: 12px; box-shadow: var(--shadow-sm); overflow: hidden; }
+        .event-content { padding: 15px; color: var(--text-main); }
+        .event-date { background: var(--secondary-color); color: #333; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 700; display: inline-block; margin-bottom: 8px; }
+
+        /* Modals */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s; backdrop-filter: blur(4px); }
+        .modal-overlay.open { opacity: 1; pointer-events: all; }
+        .modal { background: var(--card-bg); width: 90%; max-width: 500px; padding: 30px; border-radius: 16px; box-shadow: var(--shadow-lg); transform: translateY(20px); transition: transform 0.3s; color: var(--text-main); }
+        .modal-overlay.open .modal { transform: translateY(0); }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 700; font-size: 0.9rem; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--input-bg); color: var(--text-main); font-family: inherit; }
+        
+        /* Toast */
+        #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 2000; }
+        .toast { background: #333; color: white; padding: 12px 20px; border-radius: 8px; margin-top: 10px; box-shadow: var(--shadow-md); animation: slideIn 0.3s ease; display: flex; align-items: center; gap: 10px; }
+        .toast.success { border-left: 4px solid var(--primary-light); }
+        .toast.error { border-left: 4px solid var(--accent-color); }
+        .toast.info { border-left: 4px solid var(--secondary-color); }
+
+        /* Lightbox */
+        #lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 3000; display: none; justify-content: center; align-items: center; flex-direction: column; }
+        #lightbox img { max-width: 90%; max-height: 80vh; border: 5px solid white; border-radius: 4px; }
+        #lightbox-caption { color: white; margin-top: 15px; font-size: 1.2rem; }
+
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .empty-state { text-align: center; padding: 40px; color: var(--text-muted); }
+
+        /* =========================================
+           RESPONSIVE MEDIA QUERIES
+           ========================================= */
+        @media (max-width: 768px) {
+            aside { display: none; }
+            .mobile-toggle-btn { display: block; }
+            .mobile-menu-dropdown { display: block; }
+            header { padding: 10px 15px; }
+            .brand-logo { display: block; height: 35px; }
+            main { margin-left: 0; }
+            #content-area { padding: 15px; }
+            .header-actions .btn span { display: none; }
+            .header-actions .btn i { margin: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR (Desktop) -->
+    <aside id="sidebar">
+        <!-- Sidebar Branding: Logo 1 (Symbol) -->
+        <div class="brand">
+            <img src="https://z-cdn-media.chatglm.cn/files/691ad60c-0efc-41ae-9403-1c498e80b75d.PNG?auth_key=1868675181-3a53deabc278460884f62e7805c87be2-0-c3745dee68f6ea522399293fc812d318" alt="myPhamilee Symbol" class="sidebar-logo">
+            <button class="theme-toggle" onclick="app.toggleTheme()" title="Toggle Dark Mode">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+        </div>
+        <ul class="sidebar-nav-list">
+            <li><button onclick="app.navigate('dashboard')" class="sidebar-btn active" id="nav-dashboard"><i class="fa-solid fa-house"></i> Dashboard</button></li>
+            <li><button onclick="app.navigate('tree')" class="sidebar-btn" id="nav-tree"><i class="fa-solid fa-sitemap"></i> Family Tree</button></li>
+            <li><button onclick="app.navigate('gallery')" class="sidebar-btn" id="nav-gallery"><i class="fa-solid fa-images"></i> History Gallery</button></li>
+            <li><button onclick="app.navigate('members')" class="sidebar-btn" id="nav-members"><i class="fa-solid fa-users"></i> Members</button></li>
+            <li><button onclick="app.navigate('approvals')" class="sidebar-btn" id="nav-approvals"><i class="fa-solid fa-user-check"></i> Approvals <span id="approval-badge" style="background:var(--accent-color); font-size:0.7rem; padding:2px 6px; border-radius:10px; display:none;">0</span></button></li>
+            <li><button onclick="app.navigate('messages')" class="sidebar-btn" id="nav-messages"><i class="fa-solid fa-comments"></i> Messages</button></li>
+            <li><button onclick="app.navigate('events')" class="sidebar-btn" id="nav-events"><i class="fa-solid fa-calendar-days"></i> Reunions</button></li>
+        </ul>
+        <div class="user-profile">
+            <img src="https://picsum.photos/seed/currentUser/100/100" alt="Me" class="user-avatar" id="current-user-img">
+            <div class="user-info">
+                <strong id="current-user-name">Loading...</strong>
+                <small id="current-user-role">Family Admin</small>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        <header>
+            <div class="header-left">
+                <button class="mobile-toggle-btn" onclick="app.toggleMobileMenu()">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <!-- Header Logo: Logo 2 (Full) -->
+                <img src="https://z-cdn-media.chatglm.cn/files/adc8ded8-0c13-40d2-8789-0afb55cb61f1.PNG?auth_key=1868675181-9e29338e67ca4d68ac519ef294e072d5-0-fca71ac6ff413e33935f37c2d551e128" alt="myPhamilee Logo" class="brand-logo">
+            </div>
+            
+            <!-- Page Title (Hidden on mobile) -->
+            <h2 id="page-title" class="desktop-only-title">Dashboard</h2>
+
+            <div class="header-actions">
+                <button class="btn btn-outline" onclick="app.toggleTheme()" style="display:none; @media(max-width:768px){display:inline-flex;}" title="Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+                <button class="btn btn-outline" onclick="app.exportGEDCOM()" title="Export Data">
+                    <i class="fa-solid fa-file-export"></i> <span>Export</span>
+                </button>
+                <button class="btn btn-primary" onclick="app.openModal('modal-add-member')"><i class="fa-solid fa-plus"></i> <span>Add Relative</span></button>
+            </div>
+
+            <!-- MOBILE DROPDOWN MENU -->
+            <div class="mobile-menu-dropdown" id="mobile-menu">
+                <a onclick="app.navigate('dashboard')" class="mobile-link active" id="mob-nav-dashboard"><i class="fa-solid fa-house"></i> Dashboard</a>
+                <a onclick="app.navigate('tree')" class="mobile-link" id="mob-nav-tree"><i class="fa-solid fa-sitemap"></i> Family Tree</a>
+                <a onclick="app.navigate('gallery')" class="mobile-link" id="mob-nav-gallery"><i class="fa-solid fa-images"></i> History Gallery</a>
+                <a onclick="app.navigate('members')" class="mobile-link" id="mob-nav-members"><i class="fa-solid fa-users"></i> Members</a>
+                <a onclick="app.navigate('approvals')" class="mobile-link" id="mob-nav-approvals"><i class="fa-solid fa-user-check"></i> Approvals</a>
+                <a onclick="app.navigate('messages')" class="mobile-link" id="mob-nav-messages"><i class="fa-solid fa-comments"></i> Messages</a>
+                <a onclick="app.navigate('events')" class="mobile-link" id="mob-nav-events"><i class="fa-solid fa-calendar-days"></i> Reunions</a>
+            </div>
+        </header>
+
+        <div id="content-area">
+            
+            <!-- VIEW: DASHBOARD -->
+            <section id="view-dashboard" class="view-section active">
+                <div class="dashboard-grid">
+                    <div class="stat-card">
+                        <h3>Total Members</h3>
+                        <div class="value" id="dash-total">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Pending Requests</h3>
+                        <div class="value" id="dash-pending">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Gallery Photos</h3>
+                        <div class="value" id="dash-photos">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Generations</h3>
+                        <div class="value" id="dash-gens">0</div>
+                    </div>
+                </div>
+
+                <h3>Quick Actions</h3>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px;">
+                    <button class="btn btn-primary" onclick="app.openModal('modal-add-event')"><i class="fa-solid fa-calendar-plus"></i> Plan Reunion</button>
+                    <button class="btn btn-outline" onclick="app.openModal('modal-upload-photo')"><i class="fa-solid fa-camera"></i> Upload History</button>
+                    <button class="btn btn-outline" onclick="app.navigate('messages')"><i class="fa-solid fa-envelope"></i> Check Messages</button>
+                </div>
+            </section>
+
+            <!-- VIEW: FAMILY TREE -->
+            <section id="view-tree" class="view-section">
+                <div style="margin-bottom: 15px; display:flex; justify-content:space-between;">
+                    <p style="color:var(--text-muted);">Visual representation of direct bloodline connections.</p>
+                    <button class="btn btn-outline" style="font-size:0.8rem;" onclick="app.resetTreeZoom()"><i class="fa-solid fa-magnifying-glass"></i> Center View</button>
+                </div>
+                <div class="tree-container" id="tree-canvas"></div>
+            </section>
+
+            <!-- VIEW: GALLERY -->
+            <section id="view-gallery" class="view-section">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                    <h3>Family History Gallery</h3>
+                    <button class="btn btn-primary" onclick="app.openModal('modal-upload-photo')"><i class="fa-solid fa-upload"></i> Upload Photo</button>
+                </div>
+                <div class="gallery-grid" id="gallery-grid"></div>
+                <div id="no-gallery-msg" class="empty-state" style="display:none;">
+                    <i class="fa-solid fa-images"></i>
+                    <p>No family photos uploaded yet.</p>
+                </div>
+            </section>
+
+            <!-- VIEW: MEMBERS -->
+            <section id="view-members" class="view-section">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Photo</th>
+                                <th>Name</th>
+                                <th>Relation</th>
+                                <th>Birth Date</th>
+                                <th>Admin</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="members-table-body"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- VIEW: APPROVALS -->
+            <section id="view-approvals" class="view-section">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Photo</th>
+                                <th>Name</th>
+                                <th>Requested By</th>
+                                <th>Relation</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="approvals-table-body"></tbody>
+                    </table>
+                </div>
+                <div id="no-approvals-msg" class="empty-state" style="display:none;">
+                    <i class="fa-solid fa-check-double"></i>
+                    <p>No pending requests.</p>
+                </div>
+            </section>
+
+            <!-- VIEW: MESSAGES -->
+            <section id="view-messages" class="view-section">
+                <div class="chat-layout">
+                    <div class="chat-sidebar">
+                        <div style="padding:15px; font-weight:bold; color:var(--text-muted); font-size:0.9rem;">CONVERSATIONS</div>
+                        <div class="chat-list" id="chat-list"></div>
+                    </div>
+                    <div class="chat-main">
+                        <div class="chat-header" style="padding:15px; border-bottom:1px solid var(--border-color); font-weight:700;" id="chat-header-name">
+                            Select a conversation
+                        </div>
+                        <div class="messages-area" id="messages-area"></div>
+                        <div class="chat-input" id="chat-input-area" style="opacity:0.5; pointer-events:none;">
+                            <input type="text" id="message-input" placeholder="Type a message...">
+                            <button class="btn btn-primary" style="border-radius:50%; width:40px; height:40px; padding:0; display:flex; align-items:center; justify-content:center;" onclick="app.sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW: EVENTS -->
+            <section id="view-events" class="view-section">
+                <div class="events-grid" id="events-grid"></div>
+                <div id="no-events-msg" class="empty-state" style="display:none;">
+                    <i class="fa-solid fa-calendar-xmark"></i>
+                    <p>No events planned.</p>
+                </div>
+                <div style="margin-top: 30px; text-align: right;">
+                     <button class="btn btn-primary" onclick="app.openModal('modal-add-event')"><i class="fa-solid fa-calendar-plus"></i> Plan Reunion</button>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- MODALS -->
+    
+    <!-- Add Member -->
+    <div class="modal-overlay" id="modal-add-member">
+        <div class="modal">
+            <div class="modal-header" style="display:flex; justify-content:space-between; margin-bottom:20px;">
+                <h3>Add Family Member</h3>
+                <button onclick="app.closeModal('modal-add-member')" style="background:none; border:none; font-size:1.5rem; cursor:pointer;">&times;</button>
+            </div>
+            <form onsubmit="app.handleAddMember(event)">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="name" required placeholder="e.g. John Doe">
+                </div>
+                <div class="form-group">
+                    <label>Birthday</label>
+                    <input type="date" name="dob" required>
+                </div>
+                <div class="form-group">
+                    <label>Relation to You</label>
+                    <select name="relation" id="relation-select" onchange="app.toggleParentSelect()">
+                        <option value="spouse">Spouse</option>
+                        <option value="child">Child</option>
+                        <option value="parent">Parent</option>
+                        <option value="sibling">Sibling</option>
+                    </select>
+                </div>
+                <div class="form-group" id="parent-link-group" style="display:none;">
+                    <label>Link to Parent (in tree)</label>
+                    <select name="parentId" id="parent-select-list"></select>
+                </div>
+                <div class="form-group">
+                    <label>Photo</label>
+                    <input type="file" id="member-photo-input" accept="image/*">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%">Send Join Request</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Event -->
+    <div class="modal-overlay" id="modal-add-event">
+        <div class="modal">
+            <div class="modal-header" style="display:flex; justify-content:space-between; margin-bottom:20px;">
+                <h3>Plan Family Event</h3>
+                <button onclick="app.closeModal('modal-add-event')" style="background:none; border:none; font-size:1.5rem; cursor:pointer;">&times;</button>
+            </div>
+            <form onsubmit="app.handleAddEvent(event)">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" name="title" required placeholder="e.g. Summer Cookout">
+                </div>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" name="date" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="description" placeholder="Details..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%">Create Event</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Upload Gallery Photo -->
+    <div class="modal-overlay" id="modal-upload-photo">
+        <div class="modal">
+            <div class="modal-header" style="display:flex; justify-content:space-between; margin-bottom:20px;">
+                <h3>Upload History</h3>
+                <button onclick="app.closeModal('modal-upload-photo')" style="background:none; border:none; font-size:1.5rem; cursor:pointer;">&times;</button>
+            </div>
+            <form onsubmit="app.handlePhotoUpload(event)">
+                <div class="form-group">
+                    <label>Photo</label>
+                    <input type="file" id="gallery-photo-input" accept="image/*" required>
+                </div>
+                <div class="form-group">
+                    <label>Caption / Year</label>
+                    <input type="text" name="caption" placeholder="e.g. Christmas 1995 at Grandma's" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%">Upload to Gallery</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Lightbox -->
+    <div id="lightbox" onclick="this.style.display='none'">
+        <img id="lightbox-img" src="" alt="Full view">
+        <div id="lightbox-caption"></div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script>
+        /* =========================================
+           CORE LOGIC (Final Version)
+           ========================================= */
+        
+        const Utils = {
+            id: () => Math.random().toString(36).substr(2, 9),
+            dateStr: (date) => new Date(date).toLocaleDateString(),
+            randomImg: (seed) => `https://picsum.photos/seed/${seed}/200/200`,
+            showToast: (msg, type = 'success') => {
+                const container = document.getElementById('toast-container');
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                let icon = type === 'success' ? 'fa-circle-check' : (type === 'error' ? 'fa-circle-exclamation' : 'fa-circle-info');
+                toast.innerHTML = `<i class="fa-solid ${icon}"></i> ${msg}`;
+                container.appendChild(toast);
+                setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
+            }
+        };
+
+        class FamilyApp {
+            constructor() {
+                this.data = {
+                    settings: { theme: 'light' },
+                    currentUser: { id: 'root', name: 'Alex Phamilee', role: 'Admin', avatar: 'alex' },
+                    members: [], 
+                    requests: [], 
+                    events: [],
+                    photos: [], 
+                    messages: [] 
+                };
+                this.init();
+            }
+
+            init() {
+                this.loadData();
+                this.applyTheme();
+                this.renderSidebar();
+                this.navigate('dashboard');
+                
+                if (this.data.members.length === 0) this.seedData();
+                this.renderAll();
+
+                // Celebratory Toast as requested
+                setTimeout(() => {
+                    if(this.data.members.length >= 9) {
+                        Utils.showToast("We have gotten ourselves on the map!!", "success");
+                    }
+                }, 1000);
+            }
+
+            seedData() {
+                // --- SPECIFIC IMAGE URLS FROM PROMPT ---
+                const PHOTO_GRANDPA = "https://z-cdn-media.chatglm.cn/files/31e675ac-0590-4863-85d2-d4af0c4bf395.JPG?auth_key=1868677332-c39745d116f148c298bf0cf603312894-0-ccbc3f84f4b97ef00c7c385e43da6d99";
+                const PHOTO_DAD = "https://z-cdn-media.chatglm.cn/files/1cc02f73-a0d5-40b7-82d9-b0c72900f61b.JPG?auth_key=1868677332-4a3442eebc984317b021a0b383416309-0-e4b5426df0dbbbc12b4b72ab6ffc1efa";
+                const PHOTO_AUNT_SARAH = "https://z-cdn-media.chatglm.cn/files/38c74f9c-dbcf-417c-ad7c-cf93a5d6efaf.JPG?auth_key=1868677332-2771f31efde24ef995723de59f39e1fe-0-0bcbc694df8e9d2020db85cab66eb82f";
+                const PHOTO_AUNT_PAM = "https://z-cdn-media.chatglm.cn/files/9e470524-a892-4466-b755-c726a4f49c94.JPG?auth_key=1868677332-7b1a380a6a5d4ab78ec7efd2ff2b26e0-0-b4319c64da2297d0e6b94e57944650b2";
+                const PHOTO_TIMMY = "https://z-cdn-media.chatglm.cn/files/dec0087a-5639-4dc7-a4f1-3602b21a227d.JPG?auth_key=1868677332-8ef8c1689f234feeba51d59f74a073c1-0-e2d76c6d8c5755bf3cfb4d60595463f7";
+                const PHOTO_TIMMY_WIFE = "https://z-cdn-media.chatglm.cn/files/b761207b-69ff-41bf-b2c9-49afd66d20e4.JPG?auth_key=1868677332-744d2f5b72cc4c00a956b0a48c10375d-0-47bbfb8f407512a6022d3e6062888cf6";
+                const PHOTO_TIMMY_SISTER = "https://z-cdn-media.chatglm.cn/files/d2f7ae79-1f37-4eb3-a7a7-f1a32ff1ad9b.JPG?auth_key=1868677332-007c0189588441ad95bacd8096ac9a00-0-40123832034c322c4d4c569d5ab8299e";
+                const PHOTO_TIMMY_CHILDREN = "https://z-cdn-media.chatglm.cn/files/4c257020-28bd-43c9-9bdc-e6a3dc32116d.JPG?auth_key=1868677332-fa1d7c3f7af74ac38f8c49ffa6f63313-0-410adf7e30fbdda26244203cffcda99c";
+
+                // --- 9 FAMILY MEMBERS ---
+                
+                // 1. Root: Grandpa Joe
+                const root = { id: Utils.id(), name: "Grandpa Joe", dob: "1950-05-12", relation: "Grandfather", photo: PHOTO_GRANDPA, status: 'approved', isAdmin: true };
+                
+                // 2, 3, 4. Generation 2
+                const dad = { id: Utils.id(), name: "Dad Mike", dob: "1975-08-20", relation: "Son", parentId: root.id, photo: PHOTO_DAD, status: 'approved', isAdmin: true };
+                const auntSarah = { id: Utils.id(), name: "Aunt Sarah", dob: "1978-02-14", relation: "Daughter", parentId: root.id, photo: PHOTO_AUNT_SARAH, status: 'approved', isAdmin: true };
+                const auntPam = { id: Utils.id(), name: "Aunt Pam", dob: "1980-05-20", relation: "Daughter", parentId: root.id, photo: PHOTO_AUNT_PAM, status: 'approved', isAdmin: false };
+                
+                // 5, 6. Generation 3 (Dad's Children)
+                const timmy = { id: Utils.id(), name: "Little Timmy", dob: "2010-11-05", relation: "Grandson", parentId: dad.id, photo: PHOTO_TIMMY, status: 'approved', isAdmin: false };
+                const timsSister = { id: Utils.id(), name: "Timmy's Sister Takeesha", dob: "2012-04-10", relation: "Granddaughter", parentId: dad.id, photo: PHOTO_TIMMY_SISTER, status: 'approved', isAdmin: false };
+                
+                // 7. Spouse (Linked to Timmy)
+                const timsWife = { id: Utils.id(), name: "Timmy's Wife", dob: "2011-01-15", relation: "Spouse", parentId: timmy.id, photo: PHOTO_TIMMY_WIFE, status: 'approved', isAdmin: false }; 
+                
+                // 8. Generation 4 (Children of Timmy)
+                const baby = { id: Utils.id(), name: "Timmy's Children", dob: "2022-12-01", relation: "Great-Grandchildren", parentId: timmy.id, photo: PHOTO_TIMMY_CHILDREN, status: 'approved', isAdmin: false };
+
+                // 9. Generation 3 (Aunt Sarah's Daughter to reach 9 count)
+                const cousinEmily = { id: Utils.id(), name: "Cousin Emily", dob: "2013-06-15", relation: "Granddaughter", parentId: auntSarah.id, photo: Utils.randomImg('cousin'), status: 'approved', isAdmin: false };
+
+                this.data.members.push(root, dad, auntSarah, auntPam, timmy, timsSister, timsWife, baby, cousinEmily);
+                
+                // Seed Gallery
+                this.data.photos = [
+                    { id: Utils.id(), src: PHOTO_TIMMY_CHILDREN, caption: "The new Grand Babies!" },
+                    { id: Utils.id(), src: PHOTO_GRANDPA, caption: "Grandpa's 70th Birthday" }
+                ];
+
+                // Seed Event
+                this.data.events.push({ id: Utils.id(), title: "Annual Phamilee Reunion", date: new Date().toISOString().split('T')[0], description: "BBQ at Grandpa's house.", type: "Cookout", attendees: [root.id] });
+
+                this.saveData();
+            }
+
+            loadData() {
+                const stored = localStorage.getItem('myPhamileePro');
+                if (stored) this.data = JSON.parse(stored);
+            }
+
+            saveData() {
+                localStorage.setItem('myPhamileePro', JSON.stringify(this.data));
+                this.renderAll();
+            }
+
+            /* --- MOBILE MENU LOGIC --- */
+            toggleMobileMenu() {
+                const menu = document.getElementById('mobile-menu');
+                menu.classList.toggle('open');
+            }
+
+            /* --- THEME --- */
+            toggleTheme() {
+                this.data.settings.theme = this.data.settings.theme === 'light' ? 'dark' : 'light';
+                this.applyTheme();
+                this.saveData();
+            }
+
+            applyTheme() {
+                document.documentElement.setAttribute('data-theme', this.data.settings.theme);
+                const icon = document.querySelector('.theme-toggle i');
+                if(icon) icon.className = this.data.settings.theme === 'light' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+                
+                const mobIcon = document.querySelector('.header-actions .fa-moon') || document.querySelector('.header-actions .fa-sun');
+                if(mobIcon) mobIcon.className = this.data.settings.theme === 'light' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+            }
+
+            renderAll() {
+                this.renderDashboard();
+                this.renderTree();
+                this.renderMembers();
+                this.renderApprovals();
+                this.renderMessages();
+                this.renderEvents();
+                this.renderGallery();
+                this.updateBadges();
+            }
+
+            /* --- NAVIGATION --- */
+            navigate(viewId) {
+                document.getElementById('mobile-menu').classList.remove('open');
+
+                document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+                const deskBtn = document.getElementById(`nav-${viewId}`);
+                if(deskBtn) deskBtn.classList.add('active');
+
+                document.querySelectorAll('.mobile-link').forEach(l => l.classList.remove('active'));
+                const mobLink = document.getElementById(`mob-nav-${viewId}`);
+                if(mobLink) mobLink.classList.add('active');
+
+                document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+                document.getElementById(`view-${viewId}`).classList.add('active');
+
+                const titles = { 'dashboard': 'Dashboard', 'tree': 'Family Tree', 'gallery': 'History Gallery', 'members': 'Family Members', 'approvals': 'Pending Approvals', 'messages': 'Messages', 'events': 'Reunions & Events' };
+                const titleEl = document.getElementById('page-title');
+                if(titleEl) titleEl.textContent = titles[viewId];
+            }
+
+            renderSidebar() { document.getElementById('current-user-name').textContent = this.data.currentUser.name; }
+
+            /* --- Dashboard --- */
+            renderDashboard() {
+                document.getElementById('dash-total').textContent = this.data.members.length;
+                document.getElementById('dash-pending').textContent = this.data.requests.filter(r => r.status === 'pending').length;
+                document.getElementById('dash-photos').textContent = this.data.photos.length;
+                
+                const getDepth = (id) => {
+                    const children = this.data.members.filter(m => m.parentId === id);
+                    if (children.length === 0) return 1;
+                    return Math.max(...children.map(c => getDepth(c.id, 1))) + 1;
+                };
+                const roots = this.data.members.filter(m => !m.parentId);
+                document.getElementById('dash-gens').textContent = roots.length ? Math.max(...roots.map(r => getDepth(r.id))) : 0;
+            }
+
+            /* --- Tree --- */
+            renderTree() {
+                const container = document.getElementById('tree-canvas');
+                const members = this.data.members.filter(m => m.status === 'approved');
+                if (members.length === 0) return;
+
+                const buildNode = (memberId) => {
+                    const member = members.find(m => m.id === memberId);
+                    if (!member) return '';
+                    const children = members.filter(m => m.parentId === memberId);
+                    
+                    let html = `<li><div class="member-node ${member.isAdmin ? 'admin-badge' : ''}" onclick="app.showMemberDetail('${member.id}')">
+                        <img src="${member.photo}"><h4>${member.name}</h4><span>${member.relation}</span></div>`;
+                    if (children.length > 0) {
+                        html += `<ul>${children.map(c => buildNode(c.id)).join('')}</ul>`;
+                    }
+                    html += `</li>`;
+                    return html;
+                };
+
+                const roots = members.filter(m => !m.parentId);
+                let treeHtml = `<div class="tree"><ul>${roots.map(r => buildNode(r.id)).join('')}</ul></div>`;
+                container.innerHTML = treeHtml;
+            }
+            resetTreeZoom() { document.getElementById('tree-canvas').scrollLeft = 0; }
+
+            /* --- Members --- */
+            renderMembers() {
+                const tbody = document.getElementById('members-table-body');
+                tbody.innerHTML = '';
+                this.data.members.forEach(m => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td><img src="${m.photo}" style="width:40px; height:40px; border-radius:50%;"></td>
+                        <td>${m.name}</td>
+                        <td>${m.relation.charAt(0).toUpperCase() + m.relation.slice(1)}</td>
+                        <td>${Utils.dateStr(m.dob)}</td>
+                        <td>${m.isAdmin ? '<i class="fa-solid fa-shield-halved" style="color:var(--primary-color)"></i>' : '-'}</td>
+                        <td>
+                            <button class="btn btn-outline" style="padding:4px 8px;" onclick="app.startChat('${m.id}')"><i class="fa-regular fa-comment"></i></button>
+                        </td>`;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            /* --- Approvals --- */
+            renderApprovals() {
+                const tbody = document.getElementById('approvals-table-body');
+                const msg = document.getElementById('no-approvals-msg');
+                tbody.innerHTML = '';
+                const pending = this.data.requests.filter(r => r.status === 'pending');
+                
+                if (pending.length === 0) { msg.style.display = 'block'; return; } 
+                msg.style.display = 'none';
+
+                pending.forEach(req => {
+                    const relativeName = req.existingRelativeId ? (this.data.members.find(m => m.id === req.existingRelativeId)?.name || 'Unknown') : 'User';
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td><img src="${req.photo}" style="width:40px; height:40px; border-radius:50%;"></td>
+                        <td>${req.name}</td>
+                        <td>${req.name}</td>
+                        <td>${req.relation} to ${relativeName}</td>
+                        <td><span class="status-badge status-pending">Pending</span></td>
+                        <td>
+                            <button class="btn btn-primary" style="padding:4px 8px;" onclick="app.processRequest('${req.id}', 'approved')">Approve</button>
+                            <button class="btn btn-outline" style="padding:4px 8px; color:var(--accent-color); border-color:var(--accent-color);" onclick="app.processRequest('${req.id}', 'rejected')">Reject</button>
+                        </td>`;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            processRequest(reqId, decision) {
+                const reqIndex = this.data.requests.findIndex(r => r.id === reqId);
+                if (reqIndex === -1) return;
+                const req = this.data.requests[reqIndex];
+
+                if (decision === 'approved') {
+                    const newMember = {
+                        id: Utils.id(), name: req.name, dob: req.dob, relation: req.relation,
+                        photo: req.photo, parentId: req.existingRelativeId, status: 'approved', isAdmin: false
+                    };
+                    this.data.members.push(newMember);
+                    this.data.requests.splice(reqIndex, 1);
+                    Utils.showToast(`${req.name} added to tree!`);
+                } else {
+                    this.data.requests.splice(reqIndex, 1);
+                    Utils.showToast(`Request rejected.`, 'error');
+                }
+                this.saveData();
+            }
+
+            /* --- Messages --- */
+            renderMessages() {
+                const list = document.getElementById('chat-list');
+                list.innerHTML = '';
+                this.data.members.forEach(m => {
+                    const div = document.createElement('div');
+                    div.className = 'chat-item';
+                    div.onclick = () => this.loadChat(m.id);
+                    div.innerHTML = `<img src="${m.photo}" style="width:35px; height:35px; border-radius:50%;"><div><div style="font-weight:bold; font-size:0.9rem;">${m.name}</div></div>`;
+                    list.appendChild(div);
+                });
+            }
+
+            loadChat(memberId) {
+                const member = this.data.members.find(m => m.id === memberId);
+                if(!member) return;
+                document.getElementById('chat-header-name').textContent = member.name;
+                document.getElementById('chat-input-area').style.opacity = '1';
+                document.getElementById('chat-input-area').style.pointerEvents = 'all';
+                document.getElementById('chat-input-area').dataset.targetId = memberId;
+
+                const area = document.getElementById('messages-area');
+                area.innerHTML = '';
+                
+                const thread = this.data.messages.filter(msg => 
+                    (msg.from === this.data.currentUser.id && msg.to === memberId) ||
+                    (msg.from === memberId && msg.to === this.data.currentUser.id)
+                ).sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+                if(thread.length === 0) {
+                    area.innerHTML = '<div style="text-align:center; color:var(--text-muted); margin-top:20px; font-size:0.8rem;">Start conversation!</div>';
+                } else {
+                    thread.forEach(msg => {
+                        const div = document.createElement('div');
+                        const isMine = msg.from === this.data.currentUser.id;
+                        div.className = `message ${isMine ? 'msg-sent' : 'msg-received'}`;
+                        div.innerHTML = `${msg.text}<div class="msg-meta" style="font-size:0.6rem; margin-top:5px; opacity:0.8; text-align:right;">${new Date(msg.timestamp).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</div>`;
+                        area.appendChild(div);
+                    });
+                }
+                area.scrollTop = area.scrollHeight;
+            }
+
+            sendMessage() {
+                const input = document.getElementById('message-input');
+                const text = input.value.trim();
+                const targetId = document.getElementById('chat-input-area').dataset.targetId;
+                if (!text || !targetId) return;
+
+                this.data.messages.push({ id: Utils.id(), from: this.data.currentUser.id, to: targetId, text: text, timestamp: new Date().toISOString() });
+                this.saveData();
+                input.value = '';
+                this.loadChat(targetId);
+            }
+            startChat(memberId) { this.navigate('messages'); setTimeout(() => this.loadChat(memberId), 100); }
+
+            /* --- Gallery --- */
+            renderGallery() {
+                const grid = document.getElementById('gallery-grid');
+                const msg = document.getElementById('no-gallery-msg');
+                grid.innerHTML = '';
+                if(this.data.photos.length === 0) { msg.style.display = 'block'; return; }
+                msg.style.display = 'none';
+                
+                this.data.photos.forEach(p => {
+                    const div = document.createElement('div');
+                    div.className = 'gallery-item';
+                    div.innerHTML = `<img src="${p.src}"><div class="gallery-caption">${p.caption}</div>`;
+                    div.onclick = () => {
+                        const lb = document.getElementById('lightbox');
+                        document.getElementById('lightbox-img').src = p.src;
+                        document.getElementById('lightbox-caption').textContent = p.caption;
+                        lb.style.display = 'flex';
+                    };
+                    grid.appendChild(div);
+                });
+            }
+
+            handlePhotoUpload(e) {
+                e.preventDefault();
+                const file = e.target.querySelector('#gallery-photo-input').files[0];
+                const caption = e.target.caption.value;
+                
+                if(file) {
+                    const reader = new FileReader();
+                    reader.onload = (evt) => {
+                        this.data.photos.push({ id: Utils.id(), src: evt.target.result, caption: caption });
+                        this.saveData();
+                        this.closeModal('modal-upload-photo');
+                        Utils.showToast("Photo added to gallery!");
+                        e.target.reset();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            /* --- Events --- */
+            renderEvents() {
+                const grid = document.getElementById('events-grid');
+                const msg = document.getElementById('no-events-msg');
+                grid.innerHTML = '';
+                if (this.data.events.length === 0) { msg.style.display = 'block'; return; }
+                msg.style.display = 'none';
+
+                this.data.events.forEach(evt => {
+                    const div = document.createElement('div');
+                    div.className = 'event-card';
+                    div.innerHTML = `
+                        <div class="event-img" style="background:var(--primary-color); display:flex; align-items:center; justify-content:center; color:white; font-size:3rem;">
+                            <i class="fa-solid fa-calendar-day"></i>
+                        </div>
+                        <div class="event-content">
+                            <span class="event-date">${Utils.dateStr(evt.date)}</span>
+                            <h3 style="color:var(--text-main); margin-bottom:5px;">${evt.title}</h3>
+                            <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:10px;">${evt.description}</p>
+                            <button class="btn btn-outline" style="width:100%" onclick="Utils.showToast('RSVP Confirmed!')">RSVP Now</button>
+                        </div>`;
+                    grid.appendChild(div);
+                });
+            }
+
+            handleAddEvent(e) {
+                e.preventDefault();
+                const form = e.target;
+                this.data.events.push({
+                    id: Utils.id(), title: form.title.value, date: form.date.value,
+                    description: form.description.value, type: "General", attendees: []
+                });
+                this.saveData();
+                this.closeModal('modal-add-event');
+                Utils.showToast("Event created!");
+                form.reset();
+            }
+
+            /* --- Forms & Actions --- */
+            toggleParentSelect() {
+                const relation = document.getElementById('relation-select').value;
+                const group = document.getElementById('parent-link-group');
+                if (relation === 'child') {
+                    group.style.display = 'block';
+                    const select = document.getElementById('parent-select-list');
+                    select.innerHTML = '<option value="">Select Parent</option>';
+                    this.data.members.filter(m => m.status === 'approved').forEach(m => {
+                        select.innerHTML += `<option value="${m.id}">${m.name}</option>`;
+                    });
+                } else { group.style.display = 'none'; }
+            }
+
+            handleAddMember(e) {
+                e.preventDefault();
+                const form = e.target;
+                const fileInput = document.getElementById('member-photo-input');
+                
+                const process = (imgUrl) => {
+                    const relation = form.relation.value;
+                    const parentId = (relation === 'child' && form.parentId.value) ? form.parentId.value : null;
+                    this.data.requests.push({
+                        id: Utils.id(), name: form.name.value, dob: form.dob.value,
+                        relation: relation, existingRelativeId: parentId, photo: imgUrl, status: 'pending'
+                    });
+                    this.saveData();
+                    this.closeModal('modal-add-member');
+                    Utils.showToast('Request sent to Admins!');
+                    form.reset();
+                };
+
+                if (fileInput.files && fileInput.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => process(ev.target.result);
+                    reader.readAsDataURL(fileInput.files[0]);
+                } else {
+                    process(Utils.randomImg(Math.random()));
+                }
+            }
+
+            updateBadges() {
+                const pending = this.data.requests.filter(r => r.status === 'pending').length;
+                const badge = document.getElementById('approval-badge');
+                badge.style.display = pending > 0 ? 'inline-block' : 'none';
+                badge.textContent = pending;
+            }
+
+            showMemberDetail(id) {
+                const m = this.data.members.find(x => x.id === id);
+                if(!m) return;
+                // Replaced alert with custom Toast for better UX
+                const details = `Name: ${m.name} | Relation: ${m.relation} | Birth: ${Utils.dateStr(m.dob)}`;
+                Utils.showToast(details, 'info');
+            }
+
+            openModal(id) { document.getElementById(id).classList.add('open'); }
+            closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+            /* --- GEDCOM Export --- */
+            exportGEDCOM() {
+                let gedcom = "0 HEAD\n1 SOUR myPhamilee\n2 VERS 1.0\n1 GEDC\n2 VERS 5.5\n1 CHAR UTF-8\n0 @I1@ SUBM\n1 NAME Alex Phamilee\n0 TRLR\n";
+                gedcom += "\n0 NOTE Family Tree exported from myPhamilee App\n";
+                this.data.members.forEach((m, index) => {
+                    gedcom += `0 @I${index+2}@ INDI\n`;
+                    gedcom += `1 NAME ${m.name}\n`;
+                    gedcom += `1 SEX M\n`; 
+                    gedcom += `1 BIRT\n2 DATE ${m.dob.replace(/-/g,' ')}\n`;
+                    if(m.relation !== 'self') {
+                        if(m.relation === 'child') gedcom += `1 FAMC @F${m.parentId}@ \n`;
+                    }
+                });
+                gedcom += "\n0 @F1@ FAM\n1 HUSB @I1@\n";
+                const blob = new Blob([gedcom], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'family_tree.ged';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                Utils.showToast("GEDCOM file downloaded!");
+            }
+        }
+
+        const app = new FamilyApp();
+
+        // Modal Click Close
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => { if(e.target === overlay) overlay.classList.remove('open'); });
+        });
+
+    </script>
+</body>
+</html>
